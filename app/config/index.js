@@ -1,14 +1,12 @@
 'use strict';
 
-var config;
-
 if (process.env.NODE_ENV === 'production') {
     // offer production stage environment variables
     // process.env.REDIS_URL
     let redisURI = require('url').parse(process.env.REDIS_URL);
     let redisPassword = redisURI.auth.split(':')[1];
     
-    config = {
+    module.exports = {
         host: process.env.host || '',
         dbURI: process.env.dbURI,
         sessionSecret: process.env.sessionSecret,
@@ -32,7 +30,5 @@ if (process.env.NODE_ENV === 'production') {
     };
 } else {
     // offer dev stage settings and data
-    config = require('./development.json');
+    module.exports = require('./development.json');
 }
-
-module.exports = config;

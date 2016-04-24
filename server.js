@@ -26,6 +26,8 @@ app.set('view engine', 'ejs');
 app.use(chatcat.session);
 app.use(passport.initialize());
 app.use(passport.session());
+
+// use our logging middleware
 app.use(require('morgan')('combined', {
     stream: {
         write: message => {
