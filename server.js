@@ -7,7 +7,8 @@ const chatcat = require('./app');
 
 const passport = require('passport');
 
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
+app.set('port', process.env.PORT || 3000);
 
 // to get our static assets (images, css files, anything that doesn't require pre-processing)
 // we use the use() method and invoke the static() method on the express instance passing it the folder containing these assets
@@ -39,4 +40,4 @@ app.use(require('morgan')('combined', {
 
 app.use('/', chatcat.router);
 
-chatcat.ioServer(app).listen(PORT, () => { console.log('ChatCAT running on port:', PORT); });
+chatcat.ioServer(app).listen(app.get('port'), () => { console.log('ChatCAT running on port:', app.get('port')); });
