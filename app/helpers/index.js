@@ -38,7 +38,7 @@ let route = routes => {
 // find a single user based on a key
 let findOne = profileID => {
     return db.userModel.findOne({
-        'profileID': profileID
+        'profileId': profileID
     });
 }
 
