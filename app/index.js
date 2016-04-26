@@ -10,7 +10,7 @@ require('./auth')();
 // create an IO server instance
 let ioServer = app => {
     
-    // for storing the list of chatrooms locally i.e. in memeory (not a scalable however)
+    // for storing the list of chatrooms locally i.e. in memory (not a scalable however)
     app.locals.chatrooms = [];
     
     // initialise http server instance

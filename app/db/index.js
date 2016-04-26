@@ -16,10 +16,20 @@ const chatUser = new Mongoose.Schema({
     profilePic: String
 });
 
-// turn schema into a usable model
+// chatroom schema
+const chatRoom = new Mongoose.Schema({
+    room: String,
+    roomID: String,
+    users: []
+});
+
+// turn schemas into a usable models
 let userModel = Mongoose.model('chatUser', chatUser);
+
+let roomModel = Mongoose.model('chatRoom', chatRoom);
 
 module.exports = {
     Mongoose,
-    userModel
+    userModel,
+    roomModel
 }
