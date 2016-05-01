@@ -83,6 +83,26 @@ let isAuthenticated = (req, res, next) => {
     }
 }
 
+// findRoom method will take an object with the selection criteria i.e { 'room': 'Fast Cars' }
+// and return the first document that matches in the chatRooms collection
+// this replaces the findRoomByName and findRoomById methods below
+let findOneRoom = query => {
+    return new Promise((resolve, reject) => {
+        db.roomModel.findOne(query, (error, room) => {
+            return error ? reject(error) : resolve(room);
+        });
+    });
+};
+
+// findRooms will return any rooms matching the query
+let findRooms = query => {
+    return new Promise((resolve, reject) => {
+        db.roomModel.find(query, (error, room) => {
+            return error ? reject(error) : resolve(room);
+        });
+    });
+};
+
 // find a chatroom by a given name
 let findRoomByName = (allRooms, room) => {
     let findRoom = allRooms.findIndex((element, index, array) => {
@@ -107,6 +127,79 @@ let findRoomById = (allRooms, roomID) => {
         } else {
             return false;
         }
+    });
+};
+
+// createRoom method will take an obect that maps back to the room schema
+// and returns a promise saving the new room back to the db
+let createRoom = newRoom => {
+    return new Promise((resolve, reject) => {
+        let room = new db.roomModel({
+            room: newRoom.room,
+            roomID: newRoom.roomID,
+            users: newRoom.users || []
+        });
+        
+        room.save((error, room) => {
+            return error ? reject(error) : resolve(room);
+        });
+    });
+};
+
+// add user to rooms users array
+let addRoomUser = (user, socket) => {
+    
+    // define our user obj that gets added to our rooms users array
+    let roomUser = {
+        socketId: socket.id,
+        // we get the userId from the session within our socket object
+        userId: socket.request.session.passport.user,
+        // userId: socket.userId, // TESTING PURPOSES ONLY
+        user: user.user,
+        userPic: user.userPic
+    };
+    
+    // query to find our room
+    let queryConditions = { roomID: user.roomID };
+    
+    // add our user to the rooms users array
+    let updateStatement = { $addToSet: { users: roomUser } };
+    
+    return new Promise((resolve, reject) => {
+        
+        db.roomModel.findOneAndUpdate(queryConditions, updateStatement, { new: true }, (error, room) => {
+            return error ? reject(error) : resolve(room);
+        });
+        
+    });
+        
+    
+};
+
+// remove user from rooms users array by socket id
+let removeRoomUsers = query => {
+    
+    // query to find the room containing our user by socket id
+    let queryConditions = { users: { $elemMatch: query } };
+    
+    // remove user to the rooms users array
+    let updateStatement = { $pull: { users: query } };
+    
+    return new Promise((resolve, reject) => {
+        
+        db.roomModel.findOneAndUpdate(queryConditions, updateStatement, { new: true }, (error, room) => {
+            return error ? reject(error) : resolve(room);
+        });
+        
+    });
+};
+
+// remove chatroom
+let removeRooms = query => {
+    return new Promise((resolve, reject) => {
+        db.roomModel.remove(query, error => {
+            return error ? reject(error) : resolve();
+        })
     });
 };
 
@@ -180,5 +273,11 @@ module.exports = {
     randomHex,
     findRoomById,
     addUserToRoom,
-    removeUserFromRoom
+    removeUserFromRoom,
+    findOneRoom,
+    findRooms,
+    createRoom,
+    addRoomUser,
+    removeRoomUsers,
+    removeRooms
 }

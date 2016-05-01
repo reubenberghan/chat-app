@@ -7,7 +7,6 @@ const chatcat = require('./app');
 
 const passport = require('passport');
 
-// const PORT = process.env.PORT || 3000;
 app.set('port', process.env.PORT || 3000);
 
 // to get our static assets (images, css files, anything that doesn't require pre-processing)
