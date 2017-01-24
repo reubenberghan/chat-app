@@ -6,6 +6,5 @@ This app also incorporates social authentication with Facebook and Twitter using
 
 ## Todo List
 
-- [ ] Implement build process using Webpack
+- [ ] Implement Vue.js, Rollup and Foundation/Bootstrap in front end
 - [ ] Add unit testing
-- [ ] Refactor front end with React
