@@ -9,7 +9,7 @@
   "author": "Reuben Berghan",
   "license": "ISC",
   "engines": {
-    "node": "5.6.0"
+    "node": "6.11.1"
   },
   "dependencies": {
     "babel-standalone": "^6.7.4",
